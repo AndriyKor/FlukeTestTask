@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fluke.API.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +12,20 @@ namespace Fluke.API.Controllers
     [ApiController]
     public class Events : ControllerBase
     {
-        public string Get()
+        private readonly IEventsRepository eventsRepository;
+
+        public Events(IEventsRepository eventsRepository)
         {
-            return "Hey there!";
+            this.eventsRepository = eventsRepository;
+        }
+        public async Task<IActionResult> Get()
+        {
+            var events = await eventsRepository.GetEventsAllAsync();
+            if (events == null)
+            {
+                return NotFound();
+            }
+            return Ok(events);
         }
     }
 }

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fluke.API.Models.Options;
+using Fluke.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,6 +27,14 @@ namespace Fluke.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Custom configuration
+            var config = new EONETConfiguration();
+            Configuration.Bind(EONETConfiguration.EONET, config);
+            services.AddSingleton(config);
+
+            // Custom services
+            services.AddScoped<IEventsRepository, EventRepository>();
+
             services.AddControllers();
         }
 

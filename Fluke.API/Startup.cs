@@ -27,6 +27,8 @@ namespace Fluke.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
+
             // Custom configuration
             var config = new EONETConfiguration();
             Configuration.Bind(EONETConfiguration.EONET, config);
@@ -34,8 +36,6 @@ namespace Fluke.API
 
             // Custom services
             services.AddScoped<IEventsRepository, EventRepository>();
-
-            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

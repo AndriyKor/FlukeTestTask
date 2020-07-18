@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Fluke.API.Models
 {
-    public class Event
+    public class EventDetails
     {
         public string Id { get; set; }
         public string Title { get; set; }

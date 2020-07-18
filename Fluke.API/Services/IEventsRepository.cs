@@ -8,6 +8,7 @@ namespace Fluke.API.Services
 {
     public interface IEventsRepository
     {
-        public Task<string> GetEventsAllAsync();
+        public Task<EventsAllDto> GetEventsAllAsync();
+        public Task<EventDetailsDto> GetEventDetails(string Id);
     }
 }

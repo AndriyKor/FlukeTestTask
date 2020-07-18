@@ -18,9 +18,22 @@ namespace Fluke.API.Controllers
         {
             this.eventsRepository = eventsRepository;
         }
+
+        [HttpGet]
         public async Task<IActionResult> Get()
         {
             var events = await eventsRepository.GetEventsAllAsync();
+            if (events == null)
+            {
+                return NotFound();
+            }
+            return Ok(events);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(string id)
+        {
+            var events = await eventsRepository.GetEventDetails(id);
             if (events == null)
             {
                 return NotFound();

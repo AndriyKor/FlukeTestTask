@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Fluke.API.Services
 {
-    public interface IEventsRepository
+    public interface IEventService
     {
-        public Task<EventsAllDto> GetEventsAllAsync();
-        public Task<EventDetailsDto> GetEventDetails(string Id);
+        public Task<EventDto> Get(string id);
+        public Task<List<EventDto>> GetAll();
     }
 }

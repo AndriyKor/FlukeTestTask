@@ -1,13 +1,7 @@
 ﻿using Fluke.API.Models;
-using Fluke.API.Mappers;
 using Fluke.API.Models.Options;
-using Fluke.API.Extentions;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 

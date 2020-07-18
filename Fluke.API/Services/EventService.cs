@@ -1,6 +1,7 @@
 ﻿using Fluke.API.Mappers;
 using Fluke.API.Models;
 using Fluke.API.Repository;
+using Fluke.API.Extentions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,25 @@ namespace Fluke.API.Services
         {
             var result = await _eventRepository.GetAllAsync();
             return result.Select(e => e.MapToDto()).ToList();
+        }
+
+        public async Task<List<EventDto>> GetAll(string orderBy, FilterModel filter)
+        {
+            var result = await GetAll();
+
+            if (filter.Status != null)
+                result = result.Where(r => r.Status == filter.Status).ToList();
+
+            if (filter.Category != null)
+                result = result.Where(r => r.Category == filter.Category).ToList();
+
+            if (filter.Date > DateTime.MinValue)
+                result = result.Where(r => r.Date.Date == filter.Date.Date).ToList();
+
+            if (orderBy != null)
+                result = result.AsQueryable().OrderBy(orderBy).ToList();
+
+            return result;
         }
     }
 }

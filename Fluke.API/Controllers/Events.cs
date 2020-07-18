@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Fluke.API.Models;
 using Fluke.API.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,9 +17,9 @@ namespace Fluke.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(string orderBy, FilterModel filter)
         {
-            var result = await _eventService.GetAll();
+            var result = await _eventService.GetAll(orderBy, filter);
             if (result == null)
             {
                 return NotFound();

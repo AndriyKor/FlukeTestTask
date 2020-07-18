@@ -1,3 +1,4 @@
+using Fluke.API.Binders;
 using Fluke.API.Models.Options;
 using Fluke.API.Repository;
 using Fluke.API.Services;
@@ -21,7 +22,10 @@ namespace Fluke.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(opts =>
+            {
+                opts.ModelBinderProviders.Insert(0, new FilterModelBinderProvider());
+            });
 
             // Custom configuration
             var config = new EONETConfiguration();

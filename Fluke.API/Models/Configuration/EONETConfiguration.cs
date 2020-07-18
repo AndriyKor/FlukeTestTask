@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Fluke.API.Models.Options
+﻿namespace Fluke.API.Models.Options
 {
     public class EONETConfiguration
     {

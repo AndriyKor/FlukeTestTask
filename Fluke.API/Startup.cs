@@ -12,6 +12,8 @@ namespace Fluke.API
 {
     public class Startup
     {
+        readonly string AllowOriginsName = "_flukeAllowOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -22,6 +24,17 @@ namespace Fluke.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    name: AllowOriginsName,
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:5000");
+                    }
+                );
+            });
+
             services.AddControllers(opts =>
             {
                 opts.ModelBinderProviders.Insert(0, new FilterModelBinderProvider());
@@ -48,6 +61,8 @@ namespace Fluke.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(AllowOriginsName);
 
             app.UseAuthorization();
 

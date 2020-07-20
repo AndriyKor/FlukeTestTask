@@ -6,7 +6,8 @@ namespace Fluke.API.Repository
 {
     public interface IEventRepository
     {
-        public Task<List<Event>> GetAllAsync();
+        public Task<IEnumerable<Event>> GetAllAsync();
+        public Task<IEnumerable<Event>> GetAllAsync(OptionsModel options);
         public Task<Event> GetAsync(string Id);
     }
 }

@@ -17,9 +17,9 @@ namespace Fluke.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string orderBy, FilterModel filter)
+        public async Task<IActionResult> Get([FromQuery]FilterModel filter, [FromQuery]OptionsModel options)
         {
-            var result = await _eventService.GetAll(orderBy, filter);
+            var result = await _eventService.GetList(filter, options);
             if (result == null)
             {
                 return NotFound();

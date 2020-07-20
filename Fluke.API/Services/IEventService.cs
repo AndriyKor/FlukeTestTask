@@ -7,7 +7,7 @@ namespace Fluke.API.Services
     public interface IEventService
     {
         public Task<EventDto> Get(string id);
-        public Task<List<EventDto>> GetAll();
-        public Task<List<EventDto>> GetAll(string orderBy, FilterModel filter);
+        public Task<IEnumerable<EventDto>> GetAll();
+        public Task<IEnumerable<EventDto>> GetList(FilterModel filter, OptionsModel options);
     }
 }

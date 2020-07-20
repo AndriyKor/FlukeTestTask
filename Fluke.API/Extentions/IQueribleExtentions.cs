@@ -9,7 +9,7 @@ namespace Fluke.API.Extentions
     {
         public static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> source, string propertyName)
         {
-            if (!IsPropertyValid(source, propertyName))
+            if (!IsPropertyValid<T>(propertyName))
                 return source.OrderBy(s => 0);
 
             return source.OrderBy(ToLambda<T>(propertyName));
@@ -17,7 +17,7 @@ namespace Fluke.API.Extentions
 
         public static IOrderedQueryable<T> OrderByDescending<T>(this IQueryable<T> source, string propertyName)
         {
-            if (!IsPropertyValid(source, propertyName))
+            if (!IsPropertyValid<T>(propertyName))
                 return source.OrderByDescending(s => 0);
 
             return source.OrderByDescending(ToLambda<T>(propertyName));
@@ -32,9 +32,9 @@ namespace Fluke.API.Extentions
             return Expression.Lambda<Func<T, object>>(propAsObject, parameter);
         }
 
-        private static bool IsPropertyValid<T>(IQueryable<T> source, string propertyName)
+        private static bool IsPropertyValid<T>(string propertyName)
         {
-            return source.FirstOrDefault().GetType().GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance) != null;
+            return typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance) != null;
         }
     }
 }

@@ -23,29 +23,27 @@ namespace Fluke.API.Services
             return result.MapToDto();
         }
 
-        public async Task<List<EventDto>> GetAll()
+        public async Task<IEnumerable<EventDto>> GetAll()
         {
             var result = await _eventRepository.GetAllAsync();
             return result.Select(e => e.MapToDto()).ToList();
         }
 
-        public async Task<List<EventDto>> GetAll(string orderBy, FilterModel filter)
+        public async Task<IEnumerable<EventDto>> GetList(FilterModel filter, OptionsModel options)
         {
-            var result = await GetAll();
-
-            if (filter.Status != null)
-                result = result.Where(r => r.Status == filter.Status).ToList();
+            var events = await _eventRepository.GetAllAsync(options);
+            var result = events.Select(e => e.MapToDto());
 
             if (filter.Category != null)
-                result = result.Where(r => r.Category == filter.Category).ToList();
+                result = result.Where(r => r.Category == filter.Category);
 
             if (filter.Date > DateTime.MinValue)
-                result = result.Where(r => r.Date.Date == filter.Date.Date).ToList();
+                result = result.Where(r => r.Date.Date == filter.Date.Date);
 
-            if (orderBy != null)
-                result = result.AsQueryable().OrderBy(orderBy).ToList();
+            if (options.OrderBy != null && result.Count() != 0)
+                result = result.AsQueryable().OrderBy(options.OrderBy);
 
-            return result;
+            return result.ToList();
         }
     }
 }

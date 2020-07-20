@@ -10,12 +10,15 @@ interface IProps {
 export const EventLine: React.FC<IProps> = ({ event, selectEvent }) => {
   const { id, title, status, category, date } = event;
   return (
-    <Table.Row key={id}>
+    <Table.Row
+      key={id}
+      onClick={() => selectEvent(event)}
+      active={status == "closed" ? true : false}
+    >
       <Table.Cell>{title}</Table.Cell>
       <Table.Cell>{status}</Table.Cell>
       <Table.Cell>{category}</Table.Cell>
       <Table.Cell>{date}</Table.Cell>
-      <Button onClick={() => selectEvent(event)}>View</Button>
     </Table.Row>
   );
 };

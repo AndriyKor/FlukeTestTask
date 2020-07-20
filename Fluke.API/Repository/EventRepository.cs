@@ -1,5 +1,5 @@
-﻿using Fluke.API.Models;
-using Fluke.API.Models.Options;
+﻿using Fluke.Domain.Models;
+using Fluke.Domain.Models.Options;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net.Http;

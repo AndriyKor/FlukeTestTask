@@ -1,4 +1,4 @@
-﻿using Fluke.API.Models;
+﻿using Fluke.Domain.Models;
 
 namespace Fluke.API.Mappers
 {

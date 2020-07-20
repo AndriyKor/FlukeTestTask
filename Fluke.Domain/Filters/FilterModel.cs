@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Fluke.API.Models
+namespace Fluke.Domain.Models
 {
     public class FilterModel
     {

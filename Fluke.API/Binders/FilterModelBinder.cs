@@ -1,4 +1,4 @@
-﻿using Fluke.API.Models;
+﻿using Fluke.Domain.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;

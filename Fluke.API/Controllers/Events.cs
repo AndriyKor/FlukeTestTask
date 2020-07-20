@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Fluke.API.Models;
+using Fluke.Domain.Models;
 using Fluke.API.Services;
 using Microsoft.AspNetCore.Mvc;
 

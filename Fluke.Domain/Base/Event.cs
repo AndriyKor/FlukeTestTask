@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Fluke.API.Models
+namespace Fluke.Domain.Models
 {
     public class Event
     {

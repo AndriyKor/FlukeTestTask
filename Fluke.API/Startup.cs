@@ -1,5 +1,5 @@
 using Fluke.API.Binders;
-using Fluke.API.Models.Options;
+using Fluke.Domain.Models.Options;
 using Fluke.API.Repository;
 using Fluke.API.Services;
 using Microsoft.AspNetCore.Builder;

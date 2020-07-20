@@ -1,4 +1,4 @@
-﻿namespace Fluke.API.Models.Options
+﻿namespace Fluke.Domain.Models.Options
 {
     public class EONETConfiguration
     {

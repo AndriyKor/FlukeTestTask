@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fluke.Domain", "Fluke.Domain\Fluke.Domain.csproj", "{BD564B46-F372-4535-9AAF-5A6E098F9ECB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{026107FA-ECE2-4B5C-8EEC-47CA24B9564F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{026107FA-ECE2-4B5C-8EEC-47CA24B9564F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{026107FA-ECE2-4B5C-8EEC-47CA24B9564F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD564B46-F372-4535-9AAF-5A6E098F9ECB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD564B46-F372-4535-9AAF-5A6E098F9ECB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD564B46-F372-4535-9AAF-5A6E098F9ECB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD564B46-F372-4535-9AAF-5A6E098F9ECB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

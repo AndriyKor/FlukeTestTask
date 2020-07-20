@@ -1,5 +1,5 @@
 ﻿using Fluke.API.Mappers;
-using Fluke.API.Models;
+using Fluke.Domain.Models;
 using Fluke.API.Repository;
 using Fluke.API.Extentions;
 using System;

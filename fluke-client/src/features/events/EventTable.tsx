@@ -6,13 +6,14 @@ import { EventBody } from "./EventBody";
 
 interface IProps {
   events: IEvent[];
+  selectEvent: (enevt: IEvent) => void;
 }
 
-export const EventTable: React.FC<IProps> = ({ events }) => {
+export const EventTable: React.FC<IProps> = ({ events, selectEvent }) => {
   return (
     <Table celled>
       <EventHeader />
-      <EventBody events={events} />
+      <EventBody events={events} selectEvent={selectEvent} />
     </Table>
   );
 };

@@ -5,4 +5,5 @@ export interface IEvent {
   category: string;
   date: string;
   closedDate: string;
+  link: string;
 }

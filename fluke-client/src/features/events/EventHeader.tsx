@@ -9,7 +9,7 @@ export function EventHeader() {
         <Table.HeaderCell>Status</Table.HeaderCell>
         <Table.HeaderCell>Category</Table.HeaderCell>
         <Table.HeaderCell>Date</Table.HeaderCell>
-        <Table.HeaderCell>Closed Date</Table.HeaderCell>
+        <Table.HeaderCell></Table.HeaderCell>
       </Table.Row>
     </Table.Header>
   );

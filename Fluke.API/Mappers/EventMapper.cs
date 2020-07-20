@@ -8,6 +8,7 @@ namespace Fluke.API.Mappers
         {
             Id = eventDetails.Id,
             Title = eventDetails.Title,
+            Link = eventDetails.Link,
             Status = eventDetails.Closed == null ? "open" : "closed",
             Category = eventDetails.Categories[0].Title,
             Date = eventDetails.Geometries[0].Date,

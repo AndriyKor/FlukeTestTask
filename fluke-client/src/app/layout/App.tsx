@@ -3,27 +3,49 @@ import axios from "axios";
 import { Container } from "semantic-ui-react";
 import { EventGrid } from "../../features/events/EventGrid";
 import { IEvent } from "../models/event";
+import { paginate } from "../../utils/paginate";
+import { options } from "../../options/options";
 
 const App = () => {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<IEvent[]>([]);
+  const [eventsDisplay, setEventsDisplay] = useState<IEvent[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  let pageSize = options.pageSize;
 
   useEffect(() => {
     axios.get("http://localhost:5002/api/events").then((response) => {
       setEvents(response.data);
+
+      const eventList = response.data.slice(0, pageSize);
+      setEventsDisplay(eventList);
     });
   }, []);
 
-  const handleSelectEvent = (event: IEvent) => {
-    setSelectedEvent(event);
+  const handleSelectEvent = (id: string) => {
+    axios.get("http://localhost:5002/api/events/" + id).then((response) => {
+      setSelectedEvent(response.data);
+    });
+  };
+
+  const handleSelectPage = (page: number) => {
+    setCurrentPage(page);
+
+    const eventList = paginate(events, page, pageSize);
+    setEventsDisplay(eventList);
   };
 
   return (
-    <Container style={{ marginTop: "20px" }}>
+    <Container>
       <EventGrid
-        events={events}
+        events={eventsDisplay}
+        totalEvents={events.length}
+        currentPage={currentPage}
+        pageSize={pageSize}
         selectedEvent={selectedEvent}
         selectEvent={handleSelectEvent}
+        selectPage={handleSelectPage}
       />
     </Container>
   );

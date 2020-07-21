@@ -1,19 +1,18 @@
 import React from "react";
-import { IEvent } from "../../app/models/event";
-import { Table, Button } from "semantic-ui-react";
+import { IEvent } from "../../../app/models/event";
+import { Table } from "semantic-ui-react";
 
 interface IProps {
   event: IEvent;
-  selectEvent: (event: IEvent) => void;
+  selectEvent: (id: string) => void;
 }
 
 export const EventLine: React.FC<IProps> = ({ event, selectEvent }) => {
-  const { id, title, status, category, date } = event;
+  const { title, status, category, date } = event;
   return (
     <Table.Row
-      key={id}
-      onClick={() => selectEvent(event)}
-      active={status == "closed" ? true : false}
+      onClick={() => selectEvent(event.id)}
+      active={status === "closed" ? true : false}
     >
       <Table.Cell>{title}</Table.Cell>
       <Table.Cell>{status}</Table.Cell>

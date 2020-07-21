@@ -1,11 +1,11 @@
 import React from "react";
-import { IEvent } from "../../app/models/event";
+import { IEvent } from "../../../app/models/event";
 import { EventLine } from "./EventLine";
 import { Table } from "semantic-ui-react";
 
 interface IProps {
   events: IEvent[];
-  selectEvent: (event: IEvent) => void;
+  selectEvent: (id: string) => void;
 }
 
 export const EventBody: React.FC<IProps> = ({ events, selectEvent }) => {

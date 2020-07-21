@@ -1,4 +1,4 @@
-# FlukeTestTask
+# Fluke - Test Task
 ## Examples of use
 Retrieve all events:
 > /api/events
@@ -25,8 +25,19 @@ Get 20 events from 'Wildfires' category for the last 30 days ordered by 'Title':
 > /api/events?orderBy=title&category=Wildfires&limit=20&days=30
 
 ## Notes
-**Configurable values:**
+### Default (configurable) options
 
 Maximum number of days: **365**
 
 Maximum limit: **50**
+
+### Development
+
+UI to do:
+- Connect pagination (footer) to event table
+- Add order by and sorting options
+- improve UI like: mouse hover cursor change, etc.
+
+API to do:
+- add Unit Tests
+- test for using of DateTime fileds

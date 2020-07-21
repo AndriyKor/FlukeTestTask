@@ -36,7 +36,7 @@ Maximum limit: **50**
 UI to do:
 - Connect pagination (footer) to event table
 - Add order by and sorting options
-- improve UI like: mouse hover cursor change, etc.
+- Improve UI like: mouse hover cursor change, etc.
 
 API to do:
 - add Unit Tests

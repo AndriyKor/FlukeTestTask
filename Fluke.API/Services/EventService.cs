@@ -40,7 +40,7 @@ namespace Fluke.API.Services
             if (filter.Date > DateTime.MinValue)
                 result = result.Where(r => r.Date.Date == filter.Date.Date);
 
-            if (options.OrderBy != null && result.Count() != 0)
+            if (options.OrderBy != null)
                 result = result.AsQueryable().OrderBy(options.OrderBy);
 
             return result.ToList();

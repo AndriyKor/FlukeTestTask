@@ -12,13 +12,11 @@ const App = () => {
   const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  let pageSize = options.pageSize;
-
   useEffect(() => {
     axios.get("http://localhost:5002/api/events").then((response) => {
       setEvents(response.data);
 
-      const eventList = response.data.slice(0, pageSize);
+      const eventList = response.data.slice(0, options.pageSize);
       setEventsDisplay(eventList);
     });
   }, []);
@@ -32,7 +30,7 @@ const App = () => {
   const handleSelectPage = (page: number) => {
     setCurrentPage(page);
 
-    const eventList = paginate(events, page, pageSize);
+    const eventList = paginate(events, page, options.pageSize);
     setEventsDisplay(eventList);
   };
 
@@ -42,7 +40,7 @@ const App = () => {
         events={eventsDisplay}
         totalEvents={events.length}
         currentPage={currentPage}
-        pageSize={pageSize}
+        pageSize={options.pageSize}
         selectedEvent={selectedEvent}
         selectEvent={handleSelectEvent}
         selectPage={handleSelectPage}

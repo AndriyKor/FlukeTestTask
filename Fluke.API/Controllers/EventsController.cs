@@ -7,11 +7,11 @@ namespace Fluke.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class Events : ControllerBase
+    public class EventsController : ControllerBase
     {
         private readonly IEventService _eventService;
 
-        public Events(IEventService eventService)
+        public EventsController(IEventService eventService)
         {
             _eventService = eventService;
         }

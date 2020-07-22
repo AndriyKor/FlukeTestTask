@@ -10,6 +10,7 @@ interface IProps {
   totalEvents: number;
   currentPage: number;
   pageSize: number;
+  selectedEvent: IEvent | null;
   selectEvent: (id: string) => void;
   selectPage: (page: number) => void;
 }
@@ -19,13 +20,18 @@ export const EventTable: React.FC<IProps> = ({
   totalEvents,
   currentPage,
   pageSize,
+  selectedEvent,
   selectEvent,
   selectPage,
 }) => {
   return (
     <Table celled selectable>
       <EventHeader />
-      <EventBody events={events} selectEvent={selectEvent} />
+      <EventBody
+        events={events}
+        selectedEvent={selectedEvent}
+        selectEvent={selectEvent}
+      />
       <EventFooter
         itemsCount={totalEvents}
         pageSize={pageSize}

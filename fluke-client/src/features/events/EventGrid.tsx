@@ -31,6 +31,7 @@ export const EventGrid: React.FC<IProps> = ({
           totalEvents={totalEvents}
           currentPage={currentPage}
           pageSize={pageSize}
+          selectedEvent={selectedEvent}
           selectEvent={selectEvent}
           selectPage={selectPage}
         />

@@ -1,11 +1,8 @@
-﻿using Fluke.API.Mappers;
+﻿using Fluke.API.Extensions;
+using Fluke.API.Mappers;
 using Fluke.Domain.Models;
 using Fluke.API.Repository;
-using Fluke.API.Extentions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Fluke.Domain.Filters;
 
 namespace Fluke.API.Services
 {
@@ -38,7 +35,7 @@ namespace Fluke.API.Services
                 result = result.Where(r => r.Category == filter.Category);
 
             if (filter.Date > DateTime.MinValue)
-                result = result.Where(r => r.Date.Date == filter.Date.Date);
+                result = result.Where(r => r.Date.Date == filter.Date.Value.Date);
 
             if (options.OrderBy != null)
                 result = result.AsQueryable().OrderBy(options.OrderBy);

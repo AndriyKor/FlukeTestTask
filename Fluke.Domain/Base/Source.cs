@@ -1,4 +1,4 @@
-﻿namespace Fluke.Domain.Models
+﻿namespace Fluke.Domain.Base
 {
     public class Source
     {

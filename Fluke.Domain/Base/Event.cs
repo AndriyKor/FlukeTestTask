@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Fluke.Domain.Models;
 
-namespace Fluke.Domain.Models
+namespace Fluke.Domain.Base
 {
     public class Event
     {
@@ -12,6 +11,6 @@ namespace Fluke.Domain.Models
         public DateTime? Closed { get; set; }
         public List<Category> Categories { get; set; }
         public List<Source> Sources { get; set; }
-        public List<Geometry> Geometries { get; set; }
+        public List<Geometry> Geometry { get; set; }
     }
 }

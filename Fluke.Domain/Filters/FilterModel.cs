@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace Fluke.Domain.Models
+﻿namespace Fluke.Domain.Filters
 {
     public class FilterModel
     {
-        public string Category { get; set; }
-        public DateTime Date { get; set; }
+        public string? Category { get; set; }
+        public DateTime? Date { get; set; }
     }
 }

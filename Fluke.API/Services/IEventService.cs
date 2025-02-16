@@ -1,6 +1,5 @@
 ﻿using Fluke.Domain.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Fluke.Domain.Filters;
 
 namespace Fluke.API.Services
 {

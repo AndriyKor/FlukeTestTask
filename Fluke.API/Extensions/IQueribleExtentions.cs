@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Fluke.API.Extentions
+namespace Fluke.API.Extensions
 {
     public static class IQueryableExtensions
     {

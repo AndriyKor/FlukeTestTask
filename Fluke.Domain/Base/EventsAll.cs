@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Fluke.Domain.Models;
 
-namespace Fluke.Domain.Models
+namespace Fluke.Domain.Base
 {
     public class EventsAll
     {

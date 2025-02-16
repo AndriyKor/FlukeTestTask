@@ -1,4 +1,4 @@
-﻿using Fluke.Domain.Models;
+﻿using Fluke.Domain.Filters;
 
 namespace Fluke.API.Helpers
 {

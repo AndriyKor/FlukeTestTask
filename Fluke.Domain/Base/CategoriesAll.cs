@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Fluke.Domain.Base;
 
 namespace Fluke.Domain.Models
 {

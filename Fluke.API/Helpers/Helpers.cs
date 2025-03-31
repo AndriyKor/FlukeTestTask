@@ -1,4 +1,4 @@
-﻿using Fluke.Domain.Models;
+﻿using Fluke.Domain.Filters;
 
 namespace Fluke.API.Helpers
 {
@@ -6,7 +6,7 @@ namespace Fluke.API.Helpers
     {
         public static string BuildQueryString(OptionsModel options)
         {
-            var queryString = System.Web.HttpUtility.ParseQueryString(string.Empty);
+            var queryStringNewOne = System.Web.HttpUtility.ParseQueryString(string.Empty);
             if (options != null)
             {
                 foreach (var parameter in options.GetType().GetProperties())
@@ -14,11 +14,11 @@ namespace Fluke.API.Helpers
                     var value = parameter.GetValue(options, null);
                     if (value != null)
                     {
-                        queryString.Add(parameter.Name.ToLower(), value.ToString());
+                        queryStringNewOne.Add(parameter.Name.ToLower(), value.ToString());
                     }
                 }
             }
-            return queryString.ToString();
+            return queryStringNewOne.ToString();
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿namespace Fluke.Domain.Models
+﻿namespace Fluke.Domain.Base
 {
     public class Category
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
     }
 }

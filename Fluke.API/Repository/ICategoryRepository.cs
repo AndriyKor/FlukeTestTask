@@ -1,6 +1,4 @@
-﻿using Fluke.Domain.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using Fluke.Domain.Base;
 
 namespace Fluke.API.Repository
 {

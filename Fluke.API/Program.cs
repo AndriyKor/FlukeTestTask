@@ -1,20 +1,50 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using Fluke.API.Configuration;
+using Fluke.API.Repository;
+using Fluke.API.Services;
+using Fluke.Domain.Models.Options;
 
-namespace Fluke.API
+var builder = WebApplication.CreateBuilder();
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddCors(options =>
 {
-    public class Program
-    {
-        public static void Main(string[] args)
+    options.AddPolicy(
+        name: "_flukeAllowOrigins",
+        corsPolicyBuilder =>
         {
-            CreateHostBuilder(args).Build().Run();
+            corsPolicyBuilder
+                .WithOrigins("http://localhost:5000")
+                .AllowAnyMethod()
+                .AllowAnyHeader();
         }
+    );
+});
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+builder.Services.Configure<EONETConfiguration>(builder.Configuration.GetSection(EONETConfiguration.EONET));
+
+builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
 }
+
+app.UseHttpsRedirection();
+app.UseRouting();
+
+app.UseCors("_flukeAllowOrigins");
+
+app.UseAuthorization();
+app.MapControllers();
+
+// Custom api mapper
+app.MapApiEndpoints();
+
+app.Run();

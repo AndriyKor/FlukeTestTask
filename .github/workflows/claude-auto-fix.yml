@@ -1,0 +1,120 @@
+name: Claude Auto-Fix Tests
+
+# Failure-remediation loop with a validation gate.
+#
+# The safety model — "Claude proposes, the test suite disposes":
+#   1. Claude reads the failing test output, traces the root cause, and edits code.
+#   2. A Verify step re-runs the FULL test suite.
+#   3. If Verify fails, the job fails — nothing is pushed, no PR is opened.
+#   4. Only a green suite produces a PR, and even then a human reviews/merges.
+#
+# The three guardrails that keep autonomy from becoming chaos:
+#   - Validation gate: the test suite is the success oracle (Verify step below).
+#   - Rollback safety net: the fix lands on a throwaway branch via PR, never on the
+#     base branch directly, so the base is always recoverable.
+#   - Iteration + permission limits: --max-turns caps the loop; --allowedTools gives
+#     Claude the minimum tools needed (run tests, read, edit) and nothing else.
+
+on:
+  # Manual trigger — run it by hand against the current branch.
+  workflow_dispatch:
+
+  # Automatic trigger — fires after the test CI workflow completes. The job-level
+  # `if` below ensures we only act when that run actually FAILED.
+  # Point `workflows` at the name of your test workflow (e.g. "CI" / "Tests").
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+
+permissions:
+  contents: write        # commit the fix to a new branch
+  pull-requests: write   # open the PR
+  id-token: write        # OIDC for the Claude action
+
+jobs:
+  auto-fix:
+    # Run on manual dispatch, or only when the triggering CI run failed.
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'failure'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install frontend deps
+        working-directory: fluke-client
+        run: npm ci
+
+      # Record the starting commit so the base branch is always recoverable.
+      - name: Checkpoint (rollback anchor)
+        run: echo "BASE_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Claude Auto-Fix
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            The test suite is failing. Reproduce it by running the backend tests
+            (`dotnet test`) and the frontend tests (`cd fluke-client && CI=true npm test`).
+            Read the failure output, trace the root cause across files, and make the
+            MINIMAL change required to make the tests pass.
+
+            Hard rules:
+            - Fix the production code, not the tests. Do NOT weaken, skip, or delete
+              assertions to force a green run.
+            - Do not refactor unrelated code.
+            - If you cannot find a safe minimal fix, stop and explain why rather than
+              guessing.
+          # Iteration limit + least-privilege tool allowlist. Claude may run the test
+          # commands, read files, and edit them — nothing else.
+          claude_args: |
+            --max-turns 15
+            --allowedTools "Bash(dotnet:*),Bash(npm:*),Read,Edit"
+
+      # ---- VALIDATION GATE ----
+      # This is the crux: the suite runs AFTER Claude's edit. If it is red, the step
+      # exits non-zero, the job fails, and the "Open PR" step below never runs.
+      - name: Verify fix — backend
+        run: dotnet test
+
+      - name: Verify fix — frontend
+        working-directory: fluke-client
+        env:
+          CI: true
+        run: npm test
+
+      # Reached only when both Verify steps were green.
+      - name: Open PR with verified fix
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git diff --quiet; then
+            echo "Tests are green and Claude made no changes — nothing to PR."
+            exit 0
+          fi
+          BRANCH="claude/auto-fix-${{ github.run_id }}"
+          git config user.name  "claude-auto-fix[bot]"
+          git config user.email "claude-auto-fix[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git commit -am "fix: auto-fix failing tests (verified green by CI)"
+          git push origin "$BRANCH"
+          gh pr create \
+            --title "Auto-fix: failing tests (verified)" \
+            --body "Automated fix by Claude. The full test suite passed in CI before this PR was opened (validation gate). Base checkpoint: \`${BASE_SHA}\`. Human review required before merge." \
+            --base "${{ github.ref_name }}" \
+            --head "$BRANCH"

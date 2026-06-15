@@ -4,5 +4,6 @@
     {
         public string? Category { get; set; }
         public DateTime? Date { get; set; }
+        public bool? IsEnabled { get; set; }
     }
 }

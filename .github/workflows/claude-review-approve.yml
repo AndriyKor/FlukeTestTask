@@ -54,12 +54,15 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          # Allow re-review when a bot pushes a commit to the PR (e.g. an @claude
-          # fix lands as github-actions[bot]). Without this the action refuses
-          # bot-initiated runs and the synchronize re-review fails. Kept narrow to
-          # the Actions bot — do NOT use '*', which would let any bot (Dependabot,
-          # etc.) trigger the approve flow.
-          allowed_bots: 'github-actions[bot]'
+          # Allow re-review when a bot pushes a commit to the PR. Two identities do
+          # this here: github-actions[bot] (commits pushed via GITHUB_TOKEN) and
+          # claude[bot] (fixes pushed by the @claude GitHub App). Without listing
+          # them the action refuses the bot-initiated synchronize run and no updated
+          # verdict is posted. Kept to these two known bots rather than '*' — note
+          # that bot-AUTHORED PRs are already excluded by the job-level
+          # `user.type == 'User'` guard, so this only covers bot-pushed commits on
+          # human PRs.
+          allowed_bots: 'github-actions[bot],claude[bot]'
           prompt: |
             Review pull request #${{ github.event.pull_request.number }} for
             correctness bugs and clear quality problems. Read the diff with

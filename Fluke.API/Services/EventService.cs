@@ -37,6 +37,9 @@ namespace Fluke.API.Services
             if (filter.Date > DateTime.MinValue)
                 result = result.Where(r => r.Date.Date == filter.Date.Value.Date);
 
+            if (filter.IsEnabled.HasValue)
+                result = result.Where(r => r.Status == (filter.IsEnabled.Value ? "open" : "closed"));
+
             if (options.OrderBy != null)
                 result = result.AsQueryable().OrderBy(options.OrderBy);
 

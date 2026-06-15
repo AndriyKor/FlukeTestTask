@@ -1,0 +1,77 @@
+name: Claude Review & Approve
+
+# Claude reviews each PR and, ONLY if it is clean, submits an approving review.
+# If it finds blocking issues it requests changes instead. The pass/fail decision
+# is Claude's; approving is just one of two GitHub commands it is permitted to run.
+#
+# Why a GitHub App identity (not the default GITHUB_TOKEN)?
+#   An approval from `github-actions[bot]` does NOT satisfy a branch-protection
+#   "require N approvals" rule. We mint a token for a dedicated GitHub App so the
+#   approval comes from a distinct reviewer that DOES count toward that gate.
+#
+# One-time setup required (see PR description):
+#   - Create (or reuse) a GitHub App with `pull_requests: write` + `contents: read`,
+#     installed on this repo.
+#   - Store its credentials as repo secrets: REVIEW_APP_ID and REVIEW_APP_PRIVATE_KEY.
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write   # required to submit an approving review
+  id-token: write
+
+jobs:
+  review-approve:
+    # Safe default: only auto-approve human-authored PRs. Bot PRs (e.g. the
+    # auto-fix workflow, Dependabot) keep a human in the loop. Relax this `if`
+    # to include bots if you want — but you can never approve a PR authored by
+    # this same App (GitHub forbids self-approval).
+    if: github.event.pull_request.user.type == 'User'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Mint an installation token for our GitHub App. The review/approval will be
+      # attributed to the App, giving a reviewer distinct from the PR author.
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.REVIEW_APP_ID }}
+          private-key: ${{ secrets.REVIEW_APP_PRIVATE_KEY }}
+
+      - name: Claude review + conditional approve
+        uses: anthropics/claude-code-action@v1
+        env:
+          # gh CLI inside Claude's Bash tool authenticates with the App token.
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            Review pull request #${{ github.event.pull_request.number }} for
+            correctness bugs and clear quality problems. Read the diff with
+            `gh pr diff ${{ github.event.pull_request.number }}` and inspect any
+            files you need for context.
+
+            Then take exactly ONE action:
+            - If you find any blocking issue (a bug, a regression, a security or
+              data-loss risk, or a broken contract), request changes:
+                gh pr review ${{ github.event.pull_request.number }} \
+                  --request-changes --body "<concise summary of each blocker>"
+            - ONLY if the PR is clean and meets the bar, approve it:
+                gh pr review ${{ github.event.pull_request.number }} \
+                  --approve --body "<one-line summary of why it passed>"
+
+            Never approve if you are unsure or lack context — request changes and
+            say what you need instead. Do not approve a PR that only has nits;
+            leave those as comments in the body but still approve if non-blocking.
+          # Least privilege: Claude may inspect the PR and submit a review verdict.
+          claude_args: |
+            --allowedTools "Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh pr review:*),Read,Grep"
